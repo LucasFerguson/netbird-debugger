@@ -29,6 +29,9 @@ class Config:
     ROUTINE_TIMEOUT_SECONDS = _env_int("NETBIRD_ROUTINE_TIMEOUT_SECONDS", 5)
     DEEP_TIMEOUT_SECONDS = _env_int("NETBIRD_DEEP_TIMEOUT_SECONDS", 30)
 
+    AUTO_RESTART_ENABLED = os.getenv("NETBIRD_AUTO_RESTART_ENABLED", "true").lower() == "true"
+    RESTART_WAIT_SECONDS = _env_int("NETBIRD_RESTART_WAIT_SECONDS", 10)
+
     SERVICES = [
         "gitea.netbird.cloud:3000",
         "pve4.netbird.cloud",
