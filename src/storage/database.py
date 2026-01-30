@@ -169,5 +169,18 @@ class Database:
         )
         return list(cursor.fetchall())
 
+    def get_recent_health_checks(self, limit: int = 200) -> list[sqlite3.Row]:
+        cursor = self._execute(
+            "SELECT * FROM health_checks ORDER BY timestamp DESC LIMIT ?",
+            [limit],
+        )
+        return list(cursor.fetchall())
+
+    def clear_all(self) -> None:
+        self._execute("DELETE FROM health_checks")
+        self._execute("DELETE FROM failures")
+        self._execute("DELETE FROM windows_events")
+        self._execute("DELETE FROM meta_logs")
+
 
 db = Database(Config.DB_PATH)

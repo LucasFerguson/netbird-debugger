@@ -6,8 +6,15 @@ import time
 from datetime import datetime, timezone
 from typing import Any
 
+from monitors.deep_network import (
+    get_active_connections,
+    get_dns_servers,
+    get_network_adapters,
+    get_routing_table,
+)
 from monitors.network_monitor import check_dns, check_internet, check_services
 from monitors.process_monitor import check_netbird_running
+from monitors.windows_events import get_recent_system_events
 
 
 def _utc_now() -> str:
@@ -69,3 +76,14 @@ def assess_health(results: dict[str, Any]) -> str:
     if netbird_running and not all_services:
         return "degraded"
     return "healthy"
+
+
+def run_deep_checks() -> dict[str, Any]:
+    return {
+        "timestamp": _utc_now(),
+        "network_adapters": get_network_adapters(),
+        "routing_table": get_routing_table(),
+        "dns_servers": get_dns_servers(),
+        "active_connections": get_active_connections(),
+        "windows_events": get_recent_system_events(),
+    }
